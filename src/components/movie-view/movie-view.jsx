@@ -1,4 +1,8 @@
 import { MovieCard } from "../movie-card/movie-card";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+import "./movie-view.scss"
 
 export const MovieView = ({ movie, movies, onBackClick }) => {
   let similarMovies = movies.filter((movies) => {
@@ -14,7 +18,7 @@ export const MovieView = ({ movie, movies, onBackClick }) => {
   return (
     <div>
       <div>
-        <img src={movie.image} />
+        <img className="w-100" src={movie.image} />
       </div>
       <div>
         <span>Title: </span>
@@ -32,20 +36,29 @@ export const MovieView = ({ movie, movies, onBackClick }) => {
         <span>Director: </span>
         <span>{movie.director}</span>
       </div>
-      <button onClick={onBackClick}>Back</button>
+      <button
+        onClick={onBackClick}
+        className="back-button"
+        style={{ cursor: "pointer" }}
+      >
+        Back
+      </button>
       <hr />
       <h2>Similar Movies</h2>
-      {similarMovies.map((movie) => {
-        return (
-          <MovieCard
-            key={movie._id}
-            movie={movie}
-            onMovieClick={(newSelectedMovie) => {
-              setSelectedMovie(newSelectedMovie);
-            }}
-          />
-        );
-      })}
+      <Row>
+        {similarMovies.map((movie) => {
+          return (
+            <Col key={movie.id} md={3}>
+              <MovieCard
+                movie={movie}
+                onMovieClick={(newSelectedMovie) => {
+                  setSelectedMovie(newSelectedMovie);
+                }}
+              />
+            </Col>
+          );
+        })}
+      </Row>
     </div>
   );
 };
