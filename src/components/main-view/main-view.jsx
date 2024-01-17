@@ -45,17 +45,17 @@ export const MainView = () => {
   const favorite = (id) => {
     fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}/movies/${id}`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
       if (response.ok) {
-        return response.json();
+        console.log(response);
+        alert("Added to favorites!");
       } else {
         alert("Failed to favorite movie!");
       }
-    }).then((user) => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-      }
+    }).then((data) => {
+      console.log(data);
+      console.log(JSON.stringify(data));
     }).catch(error => {
       console.error('Error: ', error);
     });
@@ -68,14 +68,14 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` }
     }).then((response) => {
       if (response.ok) {
-        return response.json();
+        alert("Removed from favorites!");
+        window.location.reload();
       } else {
         alert("Failed to unfavorite movie!");
       }
-    }).then((user) => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-      }
+    }).then((data) => {
+      console.log(data);
+      console.log(JSON.stringify(data));
     }).catch(error => {
       console.error('Error: ', error);
     });
@@ -87,6 +87,8 @@ export const MainView = () => {
         user={user}
         onLoggedOut={() => {
           setUser(null);
+          setToken(null);
+          localStorage.clear();
         }}
       />
       <Row className="justify-content-md-center">
@@ -133,6 +135,9 @@ export const MainView = () => {
                   <Col md={8}>
                     <ProfileView
                       user={user}
+                      setUser={setUser}
+                      token={token}
+                      setToken={setToken}
                       movies={movies}
                       favorite={favorite}
                       unfavorite={unfavorite}
