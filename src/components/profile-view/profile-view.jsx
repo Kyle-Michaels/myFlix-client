@@ -4,21 +4,66 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
-export const ProfileView = ({ user, movies, favorite, unfavorite }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [birthday, setBirthday] = useState("");
+export const ProfileView = ({ user, setUser, token, setToken, movies, favorite, unfavorite }) => {
+  const [username, setUsername] = useState(user.Username);
+  const [password, setPassword] = useState(user.Password);
+  const [email, setEmail] = useState(user.Email);
+  const [birthday, setBirthday] = useState(user.Birthday);
 
   let favoriteMovies = movies.filter(m => user.FavoriteMovies.includes(m.id))
 
   const handleUpdate = (event) => {
     event.preventDefault();
-  }
+
+    const data = {
+      Username: username,
+      Password: password,
+      Email: email,
+      Birthday: birthday
+    };
+    console.log(user.Username);
+    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    }).then(async (response) => {
+      if (response.ok) {
+        const updatedUser = await response.json();
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        alert("Account information updated!");
+        window.location.reload();
+      } else {
+        alert("Account information was not updated!");
+      }
+    }).catch(error => {
+      console.error('Error: ', error);
+    });
+  };
 
   const handleDelete = (event) => {
     event.preventDefault();
-  }
+
+    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response) => {
+      if (response.ok) {
+        alert("Account deleted!");
+        setUser(null);
+        setToken(null);
+        localStorage.clear();
+        window.location.reload();
+      }
+    }).catch(error => {
+      console.error('Error: ', error);
+    });
+  };
 
   return (
     <>
@@ -32,7 +77,6 @@ export const ProfileView = ({ user, movies, favorite, unfavorite }) => {
               <Card.Text>Username: {user.Username}</Card.Text>
               <Card.Text>Email: {user.Email}</Card.Text>
               <Card.Text>Birthday: {user.Birthday}</Card.Text>
-              <Card.Text>Fav: {user.FavoriteMovies}</Card.Text>
             </Card.Body>
           </Card>
         </Col>
@@ -110,6 +154,9 @@ export const ProfileView = ({ user, movies, favorite, unfavorite }) => {
           </Card>
         </Col>
       </Row>
+      <Button variant="primary" onClick={handleDelete}>
+        Delete Account
+      </Button>
     </>
   )
 }
