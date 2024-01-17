@@ -3,10 +3,11 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export const MainView = () => {
   const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -14,9 +15,8 @@ export const MainView = () => {
   const [user, setUser] = useState(storedUser ? storedUser : null);
   const [token, setToken] = useState(storedToken ? storedToken : null);
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
 
-
+  // Connect to api
   useEffect(() => {
     if (!token) {
       return;
@@ -41,45 +41,150 @@ export const MainView = () => {
       });
   }, [token]);
 
-  return (
-    <Row className="justify-content-md-center">
-      {!user ? (
-        <Col md={5}>
-          <LoginView
-            onLoggedIn={(user, token) => {
-              setUser(user);
-              setToken(token);
-            }}
-          />
-          or
-          <SignupView />
-        </Col>
-      ) : selectedMovie ? (
-        <Col md={8}>
-          <MovieView
-            movies={movies}
-            movie={selectedMovie}
-            onBackClick={() => setSelectedMovie(null)}
-          />
-        </Col>
+  // Add to favorites
+  const favorite = (id) => {
+    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}/movies/${id}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        alert("Failed to favorite movie!");
+      }
+    }).then((user) => {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    }).catch(error => {
+      console.error('Error: ', error);
+    });
+  };
 
-      ) : movies.length === 0 ? (
-        <div>The list is empty!</div>
-      ) : (
-        <>
-          {movies.map((movie) => (
-            <Col className="mb-5" key={movie.id} md={3}>
-              <MovieCard
-                movie={movie}
-                onMovieClick={(newSelectedMovie) => {
-                  setSelectedMovie(newSelectedMovie);
-                }}
-              />
-            </Col>
-          ))}
-          <Button onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}>Logout</Button>
-        </>
-      )}
-    </Row>,
+  // Delete favorites
+  const unfavorite = (id) => {
+    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}/movies/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        alert("Failed to unfavorite movie!");
+      }
+    }).then((user) => {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    }).catch(error => {
+      console.error('Error: ', error);
+    });
+  };
+
+  return (
+    <BrowserRouter>
+      <NavigationBar
+        user={user}
+        onLoggedOut={() => {
+          setUser(null);
+        }}
+      />
+      <Row className="justify-content-md-center">
+        <Routes>
+          <Route
+            path="/signup"
+            element={
+              <>
+                {user && token ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <SignupView />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <>
+                {user && token ? (
+                  <Navigate to="/" />
+                ) : (
+                  <Col md={5}>
+                    <LoginView onLoggedIn={(user, token) => {
+                      setUser(user);
+                      setToken(token);
+                    }}
+                    />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <>
+                {!user || !token ? (
+                  <Navigate to="/login" replace />
+                ) : (
+                  <Col md={8}>
+                    <ProfileView
+                      user={user}
+                      movies={movies}
+                      favorite={favorite}
+                      unfavorite={unfavorite}
+                    />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/movies/:movieId"
+            element={
+              <>
+                {!user || !token ? (
+                  <Navigate to="/login" replace />
+                ) : movies.length === 0 ? (
+                  <Col>The list is empty!</Col>
+                ) : (
+                  <Col md={8}>
+                    <MovieView movies={movies} />
+                  </Col>
+                )}
+              </>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <>
+                {!user || !token ? (
+                  <Navigate to="/login" replace />
+                ) : movies.length === 0 ? (
+                  <Col>The list is empty!</Col>
+                ) : (
+                  <>
+                    {movies.map((movie) => (
+                      <Col className="mb-4" key={movie.id} md={3}>
+                        <MovieCard
+                          movie={movie}
+                          favorite={favorite}
+                          unfavorite={unfavorite}
+                          isFav={user.FavoriteMovies.includes(movie.id)}
+                        />
+                      </Col>
+                    ))}
+                  </>
+                )}
+              </>
+            }
+          />
+        </Routes>
+      </Row>
+    </BrowserRouter>
   );
 };
