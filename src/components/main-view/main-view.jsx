@@ -48,14 +48,18 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` },
     }).then((response) => {
       if (response.ok) {
-        console.log(response);
-        alert("Added to favorites!");
+        return response.json();
       } else {
         alert("Failed to favorite movie!");
       }
-    }).then((data) => {
-      console.log(data);
-      console.log(JSON.stringify(data));
+    }).then((user) => {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        console.log('set new user');
+      } else {
+        console.log('did not set new user');
+      }
     }).catch(error => {
       console.error('Error: ', error);
     });
@@ -68,14 +72,18 @@ export const MainView = () => {
       headers: { Authorization: `Bearer ${token}` }
     }).then((response) => {
       if (response.ok) {
-        alert("Removed from favorites!");
-        window.location.reload();
+        return response.json();
       } else {
         alert("Failed to unfavorite movie!");
       }
-    }).then((data) => {
-      console.log(data);
-      console.log(JSON.stringify(data));
+    }).then((user) => {
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        setUser(user);
+        console.log('set new user');
+      } else {
+        console.log('did not set new user');
+      }
     }).catch(error => {
       console.error('Error: ', error);
     });
@@ -180,6 +188,7 @@ export const MainView = () => {
                           favorite={favorite}
                           unfavorite={unfavorite}
                           isFav={user.FavoriteMovies.includes(movie.id)}
+                          user={user}
                         />
                       </Col>
                     ))}
