@@ -1,19 +1,11 @@
-import { MovieCard } from "../movie-card/movie-card";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import "./movie-view.scss"
 
-export const MovieView = ({ movie, movies, onBackClick }) => {
-  let similarMovies = movies.filter((movies) => {
-    if (movie.genreName === movies.genreName) {
-      if (movie.title === movies.title) {
-        return false;
-      }
-      return true;
-    }
+export const MovieView = ({ movies }) => {
+  const { movieId } = useParams();
 
-  });
+  const movie = movies.find((m) => m.id === movieId);
 
   return (
     <div>
@@ -36,29 +28,11 @@ export const MovieView = ({ movie, movies, onBackClick }) => {
         <span>Director: </span>
         <span>{movie.director}</span>
       </div>
-      <button
-        onClick={onBackClick}
-        className="back-button"
-        style={{ cursor: "pointer" }}
-      >
-        Back
-      </button>
+      <Link to={`/`}>
+        <button className="back-button">Back</button>
+      </Link>
       <hr />
       <h2>Similar Movies</h2>
-      <Row>
-        {similarMovies.map((movie) => {
-          return (
-            <Col key={movie.id} md={3}>
-              <MovieCard
-                movie={movie}
-                onMovieClick={(newSelectedMovie) => {
-                  setSelectedMovie(newSelectedMovie);
-                }}
-              />
-            </Col>
-          );
-        })}
-      </Row>
     </div>
   );
 };
