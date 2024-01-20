@@ -8,7 +8,7 @@ import Row from "react-bootstrap/Row";
 export const MoviesList = () => {
   const movies = useSelector((state) => state.movies.list);
   const filter = useSelector((state) =>
-    state.books.filter).trim().toLowerCase();
+    state.movies.filter).trim().toLowerCase();
 
   const filteredMovies = movies.filter((movie) =>
     movie.title.toLowerCase().includes(filter)
@@ -17,10 +17,10 @@ export const MoviesList = () => {
   return (
     <>
       <Row>
-        <BooksFilter />
+        <MoviesFilter />
       </Row>
       <Row>
-        {books.length === 0 ? (
+        {movies.length === 0 ? (
           <Col>The list is empty!</Col>
         ) : (
           filteredMovies.map((movie) => (
