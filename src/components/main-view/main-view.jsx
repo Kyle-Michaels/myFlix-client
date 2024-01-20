@@ -10,15 +10,21 @@ import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setMovies } from "../../redux/reducers/movies";
+import { setUser } from "../../redux/reducers/user";
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
   const movies = useSelector((state) => state.movies);
+  const { user, token } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
+    if (storedUser && storedToken) {
+      dispatch(setUser({ user: storedUser, token: storedToken }));
+    }
+  }, [dispatch]);
 
   // Connect to api
   useEffect(() => {
@@ -95,14 +101,7 @@ export const MainView = () => {
 
   return (
     <BrowserRouter>
-      <NavigationBar
-        user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-      />
+      <NavigationBar />
       <Row className="justify-content-md-center">
         <Routes>
           <Route
@@ -127,11 +126,7 @@ export const MainView = () => {
                   <Navigate to="/" />
                 ) : (
                   <Col md={5}>
-                    <LoginView onLoggedIn={(user, token) => {
-                      setUser(user);
-                      setToken(token);
-                    }}
-                    />
+                    <LoginView />
                   </Col>
                 )}
               </>
@@ -146,10 +141,10 @@ export const MainView = () => {
                 ) : (
                   <Col md={8}>
                     <ProfileView
-                      user={user}
-                      setUser={setUser}
-                      token={token}
-                      setToken={setToken}
+                      //user={user}
+                      //setUser={setUser}
+                      //token={token}
+                      //setToken={setToken}
                       movies={movies}
                       favorite={favorite}
                       unfavorite={unfavorite}
