@@ -4,7 +4,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/reducers/user";
 
-export const ProfileView = ({ movies, favorite, unfavorite }) => {
+export const ProfileView = ({ movies }) => {
   const { user, token } = useSelector((state) => state.user);
   const [username, setUsername] = useState(user.Username);
   const [password, setPassword] = useState(user.Password);
@@ -140,12 +140,7 @@ export const ProfileView = ({ movies, favorite, unfavorite }) => {
               <Row>
                 {favoriteMovies.map((movie) => (
                   <Col className="mb-4" key={movie.id} md={3}>
-                    <MovieCard
-                      movie={movie}
-                      favorite={favorite}
-                      unfavorite={unfavorite}
-                      isFav={user.FavoriteMovies.includes(movie.id)}
-                    />
+                    <MovieCard movie={movie} />
                   </Col>
                 ))}
               </Row>
