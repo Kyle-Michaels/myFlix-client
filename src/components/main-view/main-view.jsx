@@ -5,16 +5,27 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
+import { MoviesList } from "../movies-list/movies-list";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovies } from "../../redux/reducers/movies";
+import { setUser } from "../../redux/reducers/user";
 
 export const MainView = () => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  const storedToken = localStorage.getItem("token");
-  const [user, setUser] = useState(storedUser ? storedUser : null);
-  const [token, setToken] = useState(storedToken ? storedToken : null);
-  const [movies, setMovies] = useState([]);
+  const movies = useSelector((state) => state.movies.list);
+  const { user, token } = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const storedToken = localStorage.getItem("token");
+    if (storedUser && storedToken) {
+      dispatch(setUser({ user: storedUser, token: storedToken }));
+    }
+  }, [dispatch]);
 
   // Connect to api
   useEffect(() => {
@@ -37,7 +48,7 @@ export const MainView = () => {
             director: movie.Director.Name,
           };
         });
-        setMovies(moviesFromApi);
+        dispatch(setMovies(moviesFromApi))
       });
   }, [token]);
 
@@ -55,10 +66,7 @@ export const MainView = () => {
     }).then((user) => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
-        console.log('set new user');
-      } else {
-        console.log('did not set new user');
+        dispatch(setUser({ user: user, token: token }));
       }
     }).catch(error => {
       console.error('Error: ', error);
@@ -79,10 +87,7 @@ export const MainView = () => {
     }).then((user) => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
-        console.log('set new user');
-      } else {
-        console.log('did not set new user');
+        dispatch(setUser({ user: user, token: token }));
       }
     }).catch(error => {
       console.error('Error: ', error);
@@ -91,14 +96,7 @@ export const MainView = () => {
 
   return (
     <BrowserRouter>
-      <NavigationBar
-        user={user}
-        onLoggedOut={() => {
-          setUser(null);
-          setToken(null);
-          localStorage.clear();
-        }}
-      />
+      <NavigationBar />
       <Row className="justify-content-md-center">
         <Routes>
           <Route
@@ -123,11 +121,7 @@ export const MainView = () => {
                   <Navigate to="/" />
                 ) : (
                   <Col md={5}>
-                    <LoginView onLoggedIn={(user, token) => {
-                      setUser(user);
-                      setToken(token);
-                    }}
-                    />
+                    <LoginView />
                   </Col>
                 )}
               </>
@@ -142,10 +136,10 @@ export const MainView = () => {
                 ) : (
                   <Col md={8}>
                     <ProfileView
-                      user={user}
-                      setUser={setUser}
-                      token={token}
-                      setToken={setToken}
+                      //user={user}
+                      //setUser={setUser}
+                      //token={token}
+                      //setToken={setToken}
                       movies={movies}
                       favorite={favorite}
                       unfavorite={unfavorite}
@@ -175,25 +169,9 @@ export const MainView = () => {
             path="/"
             element={
               <>
-                {!user || !token ? (
-                  <Navigate to="/login" replace />
-                ) : movies.length === 0 ? (
-                  <Col>The list is empty!</Col>
-                ) : (
-                  <>
-                    {movies.map((movie) => (
-                      <Col className="mb-4" key={movie.id} md={3}>
-                        <MovieCard
-                          movie={movie}
-                          favorite={favorite}
-                          unfavorite={unfavorite}
-                          isFav={user.FavoriteMovies.includes(movie.id)}
-                          user={user}
-                        />
-                      </Col>
-                    ))}
-                  </>
-                )}
+                {!user || !token ?
+                  <Navigate to="/login" replace /> : <MoviesList />
+                }
               </>
             }
           />
