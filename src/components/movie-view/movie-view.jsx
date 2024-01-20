@@ -2,8 +2,8 @@ import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import "./movie-view.scss"
 
-export const MovieView = ({ movies }) => {
-  const { movieId } = useParams();
+export const MovieView = () => {
+  const movies = useSelector((state) => state.movies.list)
 
   const movie = movies.find((m) => m.id === movieId);
 
@@ -31,8 +31,6 @@ export const MovieView = ({ movies }) => {
       <Link to={`/`}>
         <button className="back-button">Back</button>
       </Link>
-      <hr />
-      <h2>Similar Movies</h2>
     </div>
   );
 };
