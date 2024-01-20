@@ -1,9 +1,11 @@
 import { useParams } from "react-router";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./movie-view.scss"
 
 export const MovieView = () => {
-  const movies = useSelector((state) => state.movies.list)
+  const movies = useSelector((state) => state.movies.list);
+  const { movieId } = useParams();
 
   const movie = movies.find((m) => m.id === movieId);
 
