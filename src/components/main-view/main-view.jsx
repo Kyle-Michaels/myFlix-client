@@ -52,48 +52,6 @@ export const MainView = () => {
       });
   }, [token]);
 
-  // Add to favorites
-  const favorite = (id) => {
-    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}/movies/${id}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alert("Failed to favorite movie!");
-      }
-    }).then((user) => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        dispatch(setUser({ user: user, token: token }));
-      }
-    }).catch(error => {
-      console.error('Error: ', error);
-    });
-  };
-
-  // Delete favorites
-  const unfavorite = (id) => {
-    fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}/movies/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    }).then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        alert("Failed to unfavorite movie!");
-      }
-    }).then((user) => {
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        dispatch(setUser({ user: user, token: token }));
-      }
-    }).catch(error => {
-      console.error('Error: ', error);
-    });
-  };
-
   return (
     <BrowserRouter>
       <NavigationBar />
@@ -137,8 +95,6 @@ export const MainView = () => {
                   <Col md={8}>
                     <ProfileView
                       movies={movies}
-                      favorite={favorite}
-                      unfavorite={unfavorite}
                     />
                   </Col>
                 )}
