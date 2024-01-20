@@ -136,10 +136,6 @@ export const MainView = () => {
                 ) : (
                   <Col md={8}>
                     <ProfileView
-                      //user={user}
-                      //setUser={setUser}
-                      //token={token}
-                      //setToken={setToken}
                       movies={movies}
                       favorite={favorite}
                       unfavorite={unfavorite}
