@@ -24,7 +24,6 @@ export const ProfileView = ({ movies, favorite, unfavorite }) => {
       Email: email,
       Birthday: birthday
     };
-    console.log(user.Username);
     fetch(`https://my-flix-4e112dcd3c89.herokuapp.com/users/${user.Username}`, {
       method: "PUT",
       body: JSON.stringify(data),
@@ -36,9 +35,8 @@ export const ProfileView = ({ movies, favorite, unfavorite }) => {
       if (response.ok) {
         const updatedUser = await response.json();
         localStorage.setItem('user', JSON.stringify(updatedUser));
-        dispatch(setUser({ user: updatedUser }));
+        dispatch(setUser({ user: updatedUser, token: token }));
         alert("Account information updated!");
-        window.location.reload();
       } else {
         alert("Account information was not updated!");
       }

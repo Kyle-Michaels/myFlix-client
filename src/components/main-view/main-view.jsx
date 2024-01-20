@@ -65,7 +65,7 @@ export const MainView = () => {
     }).then((user) => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
+        dispatch(setUser({ user: user, token: token }));
         console.log('set new user');
       } else {
         console.log('did not set new user');
@@ -89,7 +89,7 @@ export const MainView = () => {
     }).then((user) => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
+        dispatch(setUser({ user: user, token: token }));
         console.log('set new user');
       } else {
         console.log('did not set new user');
