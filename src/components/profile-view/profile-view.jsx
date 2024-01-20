@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button, Card, Form, Row, Col } from "react-bootstrap";
-import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 
 export const ProfileView = ({ user, setUser, token, setToken, movies, favorite, unfavorite }) => {
