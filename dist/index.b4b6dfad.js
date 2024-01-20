@@ -47257,12 +47257,32 @@ parcelHelpers.export(exports, "store", ()=>store);
 var _toolkit = require("@reduxjs/toolkit");
 var _movies = require("./reducers/movies");
 var _moviesDefault = parcelHelpers.interopDefault(_movies);
+var _user = require("./reducers/user");
+var _userDefault = parcelHelpers.interopDefault(_user);
 const store = (0, _toolkit.configureStore)({
     reducer: {
-        movies: (0, _moviesDefault.default)
+        movies: (0, _moviesDefault.default),
+        user: (0, _userDefault.default)
     }
 });
 
-},{"@reduxjs/toolkit":"fuua8","./reducers/movies":"l0qwl","@parcel/transformer-js/src/esmodule-helpers.js":"95RJL"}]},["4nu2F","kE79u","d8Dch"], "d8Dch", "parcelRequireaec4")
+},{"@reduxjs/toolkit":"fuua8","./reducers/movies":"l0qwl","@parcel/transformer-js/src/esmodule-helpers.js":"95RJL","./reducers/user":"e6tdF"}],"e6tdF":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "setUser", ()=>setUser);
+var _toolkit = require("@reduxjs/toolkit");
+const userSlice = (0, _toolkit.createSlice)({
+    name: "user",
+    initialState: null,
+    reducers: {
+        setUser: (state, action)=>{
+            return action.payload;
+        }
+    }
+});
+const { setUser } = userSlice.actions;
+exports.default = userSlice.reducer;
+
+},{"@reduxjs/toolkit":"fuua8","@parcel/transformer-js/src/esmodule-helpers.js":"95RJL"}]},["4nu2F","kE79u","d8Dch"], "d8Dch", "parcelRequireaec4")
 
 //# sourceMappingURL=index.b4b6dfad.js.map
