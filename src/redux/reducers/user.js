@@ -11,7 +11,7 @@ const userSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
-    clearUser: (state, action) => {
+    clearUser: (state) => {
       state.user = null;
       state.token = null;
       localStorage.clear();

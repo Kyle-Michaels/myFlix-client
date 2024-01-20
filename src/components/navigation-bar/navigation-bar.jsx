@@ -2,11 +2,14 @@ import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setUser, clearUser } from "../../redux/reducers/user";
+import { clearUser } from "../../redux/reducers/user";
 
 export const NavigationBar = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  console.log(localStorage);
+
+
 
   return (
     < Navbar bg="light" expand="lg" >
@@ -17,7 +20,7 @@ export const NavigationBar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" />
         <Nav className="me-auto">
-          {!user && (
+          {!localStorage.user && (
             <>
               <Nav.Link as={Link} to="/login">
                 Login
@@ -27,7 +30,7 @@ export const NavigationBar = () => {
               </Nav.Link>
             </>
           )}
-          {user && (
+          {localStorage.user && (
             <>
               <Nav.Link as={Link} to="/">
                 Home
