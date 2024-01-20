@@ -9,3 +9,7 @@ const moviesSlice = createSlice({
     }
   }
 });
+
+export const { setMovies } = moviesSlice.actions;
+
+export default moviesSlice.reducer;
