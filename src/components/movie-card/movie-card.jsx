@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Button, Card, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { ToggleFavs } from "../toggle-favs/toggle-favs";
 
-export const MovieCard = ({ movie, favorite, unfavorite, isFav }) => {
+export const MovieCard = ({ movie }) => {
   return (
     <Card className="h-100">
       <Card.Img variant="top" src={movie.image} />
@@ -17,11 +18,7 @@ export const MovieCard = ({ movie, favorite, unfavorite, isFav }) => {
             </Link>
           </Col>
           <Col>
-            {isFav ? (
-              <Button onClick={() => unfavorite(movie.id)}>💔</Button>
-            ) : (
-              <Button onClick={() => favorite(movie.id)}>❤️</Button>
-            )}
+            <ToggleFavs movie={movie} />
           </Col>
         </Row>
       </Card.Body>
