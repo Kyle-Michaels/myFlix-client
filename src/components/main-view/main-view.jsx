@@ -66,9 +66,6 @@ export const MainView = () => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
         dispatch(setUser({ user: user, token: token }));
-        console.log('set new user');
-      } else {
-        console.log('did not set new user');
       }
     }).catch(error => {
       console.error('Error: ', error);
@@ -90,9 +87,6 @@ export const MainView = () => {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
         dispatch(setUser({ user: user, token: token }));
-        console.log('set new user');
-      } else {
-        console.log('did not set new user');
       }
     }).catch(error => {
       console.error('Error: ', error);
