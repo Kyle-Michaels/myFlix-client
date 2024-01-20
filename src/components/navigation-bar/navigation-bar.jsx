@@ -7,7 +7,6 @@ import { clearUser } from "../../redux/reducers/user";
 export const NavigationBar = () => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(localStorage);
 
 
 
