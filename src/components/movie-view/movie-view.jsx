@@ -31,8 +31,6 @@ export const MovieView = () => {
       <Link to={`/`}>
         <button className="back-button">Back</button>
       </Link>
-      <hr />
-      <h2>Similar Movies</h2>
     </div>
   );
 };
