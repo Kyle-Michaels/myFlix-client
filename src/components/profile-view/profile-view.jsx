@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Button, Card, Form, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
+import { useSelector, useDispatch } from "react-redux";
+import { setUser, clearUser } from "../../redux/reducers/user";
 
-export const ProfileView = ({ user, setUser, token, setToken, movies, favorite, unfavorite }) => {
+export const ProfileView = ({ movies, favorite, unfavorite }) => {
+  const { user, token } = useSelector((state) => state.user);
   const [username, setUsername] = useState(user.Username);
   const [password, setPassword] = useState(user.Password);
   const [email, setEmail] = useState(user.Email);
   const [birthday, setBirthday] = useState(user.Birthday);
+
+  const dispatch = useDispatch();
 
   let favoriteMovies = movies.filter(m => user.FavoriteMovies.includes(m.id))
 
@@ -31,7 +36,7 @@ export const ProfileView = ({ user, setUser, token, setToken, movies, favorite, 
       if (response.ok) {
         const updatedUser = await response.json();
         localStorage.setItem('user', JSON.stringify(updatedUser));
-        setUser(updatedUser);
+        dispatch(setUser({ user: updatedUser }));
         alert("Account information updated!");
         window.location.reload();
       } else {
@@ -53,9 +58,7 @@ export const ProfileView = ({ user, setUser, token, setToken, movies, favorite, 
     }).then((response) => {
       if (response.ok) {
         alert("Account deleted!");
-        setUser(null);
-        setToken(null);
-        localStorage.clear();
+        dispatch(clearUser());
         window.location.reload();
       }
     }).catch(error => {
