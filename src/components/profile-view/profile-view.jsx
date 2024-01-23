@@ -4,8 +4,9 @@ import { MovieCard } from "../movie-card/movie-card";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser, clearUser } from "../../redux/reducers/user";
 
-export const ProfileView = ({ movies }) => {
+export const ProfileView = () => {
   const { user, token } = useSelector((state) => state.user);
+  const movies = useSelector((state) => state.movies.list);
   const [username, setUsername] = useState(user.Username);
   const [password, setPassword] = useState(user.Password);
   const [email, setEmail] = useState(user.Email);
