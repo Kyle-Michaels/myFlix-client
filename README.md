@@ -15,3 +15,14 @@
   <li>Navigate to <a href=http://localhost:1234/>http://localhost:1234/</a> to view the application</li>
   <li>Visit the live website <a href=https://k-michaels-my-flix.netlify.app/>here</a></li>
 </ul>
+<h2>Usage</h2>
+<ul>
+  <li>Create an accout with the sign up button</li>
+  <li>Log in</li>
+  <li>Click open on a movie card to view movie details</li>
+  <li>Click the heart button to add movie to favorites</li>
+  <li>Click the broken heart button to remove movie from favortes</li>
+  <li>Click profile to view profile</li>
+  <li>Edit account details in profile view</li>
+  <li>Click sign out to sign out of myFlix</li>
+</ul>
