@@ -1,3 +1,4 @@
+![preview](https://github.com/Kyle-Michaels/myFlix-client/blob/main/myFlixReact.jpg?raw=true)
 <h1>myFlix - client </h1>
 <p> This project is a website that allows you to create an account, log in, view movie and profile information, and add/remove movies from a favorites list.</p>
 <h2>Technologies</h2>
